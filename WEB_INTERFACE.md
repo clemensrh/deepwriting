@@ -2,6 +2,9 @@
 
 This web interface provides an easy-to-use platform for synthesizing handwriting from text using the DeepWriting model.
 
+![Web Interface Screenshot](screenshot_placeholder.png)
+*Note: Screenshot shows the web interface with text input, style selection, and synthesized handwriting output.*
+
 ## Features
 
 - **Text Input**: Enter any text you want to synthesize into handwriting
@@ -75,6 +78,35 @@ The interface provides several quick example texts you can try:
 - "The quick brown fox jumps over the lazy dog."
 - "I am a synthetic sample."
 - "This is handwriting synthesis."
+
+## Command-Line Demo
+
+For programmatic usage or testing without the web interface, you can use the demo script:
+
+```bash
+# Unbiased sampling (random style)
+python demo_synthesis.py -M ./model/tf-1514981744-deepwriting_synthesis_model -T "Hello, World!" -O output.svg
+
+# Biased sampling (specific style)
+python demo_synthesis.py -M ./model/tf-1514981744-deepwriting_synthesis_model -T "Hello, World!" -S 107 -O output_styled.svg
+```
+
+Options:
+- `-M, --model_path`: Path to model checkpoint directory (required)
+- `-T, --text`: Text to synthesize (default: "Hello, World!")
+- `-S, --style_id`: Style sample ID for biased sampling (optional)
+- `-O, --output`: Output SVG file path (default: output.svg)
+- `-L, --seq_len`: Maximum sequence length (default: 800)
+
+## Testing
+
+To verify that all dependencies are installed correctly:
+
+```bash
+python test_web_interface.py
+```
+
+This will check that Flask, NumPy, OpenCV, and other required packages are available.
 
 ## API Endpoints
 
