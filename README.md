@@ -43,6 +43,19 @@ python tf_evaluate_hw.py -S <path_to_save_experiment> -M <model_folder_name> -QL
 ```
 3. Evaluation options are defined in `tf_evaluate_hw.py` globally.
 
+## Web Interface
+We now provide a web interface to easily synthesize handwriting from text! 
+
+**Quick Start:**
+1. Install dependencies: `pip install -r requirements.txt`
+2. Download the [pretrained model](https://files.ait.ethz.ch/projects/deepwriting/tf-1514981744-deepwriting_synthesis_model.tar.gz) and extract it.
+3. Start the web server: `python app.py -M <path_to_model_checkpoint>`
+4. Open your browser to `http://localhost:5000`
+
+📖 **For detailed instructions, see [QUICKSTART.md](QUICKSTART.md)**
+
+For comprehensive documentation, see [WEB_INTERFACE.md](WEB_INTERFACE.md).
+
 
 ## Dependencies
 1. numpy
@@ -52,9 +65,12 @@ python tf_evaluate_hw.py -S <path_to_save_experiment> -M <model_folder_name> -QL
 5. svgwrite
 6. scikit
 7. sklearn
+8. Flask (for web interface)
 
-## Missing
-We are not planning to release demo interface.
+For the web interface, install all dependencies with:
+```
+pip install -r requirements.txt
+```
 
 ## Citation
 If you use this code or dataset in your research, please cite us as follows:
