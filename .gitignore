@@ -107,3 +107,9 @@ ENV/
 runs/
 runs_evaluation/
 data/
+
+# Web interface
+config.json
+*.svg
+output_*.svg
+

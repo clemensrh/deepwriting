@@ -1,0 +1,31 @@
+{
+  "comment": "Optional configuration file for web interface. Copy to config.json and customize as needed.",
+  "server": {
+    "host": "0.0.0.0",
+    "port": 5000,
+    "debug": false
+  },
+  "synthesis": {
+    "seq_len": 800,
+    "eoc_threshold": 0.05,
+    "cursive_threshold": 0.005,
+    "use_sample_mean": true
+  },
+  "styles": [
+    {
+      "id": 107,
+      "name": "Style 1",
+      "description": "Clean, formal handwriting"
+    },
+    {
+      "id": 226,
+      "name": "Style 2",
+      "description": "Casual, flowing style"
+    },
+    {
+      "id": 696,
+      "name": "Style 3",
+      "description": "Artistic, expressive writing"
+    }
+  ]
+}
