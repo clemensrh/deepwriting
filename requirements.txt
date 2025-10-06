@@ -1,0 +1,9 @@
+Flask==2.0.3
+Werkzeug==2.0.3
+numpy
+tensorflow>=1.2,<2.0
+matplotlib
+opencv-python
+svgwrite
+scikit-learn
+scipy

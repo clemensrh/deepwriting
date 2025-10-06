@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepWriting - Handwriting Synthesis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+        
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: 600;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .button:active {
+            transform: translateY(0);
+        }
+        
+        .button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .output-section {
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 2px solid #eee;
+        }
+        
+        .output-container {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 30px;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .output-container svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #667eea;
+            font-size: 1.2em;
+        }
+        
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .info {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .examples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .example-btn {
+            background: #f0f0f0;
+            border: 2px solid #ddd;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9em;
+        }
+        
+        .example-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🖋️ DeepWriting</h1>
+            <p>Handwriting Synthesis with Deep Learning</p>
+        </div>
+        
+        <div class="content">
+            <div class="info">
+                <strong>Welcome!</strong> This interface allows you to synthesize handwriting from text. 
+                You can enter any text and optionally select a handwriting style to mimic a particular writing style.
+            </div>
+            
+            <div class="section">
+                <h2>📝 Input Text</h2>
+                <div class="form-group">
+                    <label for="textInput">Enter the text you want to synthesize:</label>
+                    <textarea id="textInput" placeholder="Type your text here...">Hello, World!</textarea>
+                </div>
+                
+                <div class="examples">
+                    <strong>Quick examples:</strong>
+                    <button class="example-btn" onclick="setExample('Hello, World!')">Hello, World!</button>
+                    <button class="example-btn" onclick="setExample('The quick brown fox jumps over the lazy dog.')">Pangram</button>
+                    <button class="example-btn" onclick="setExample('I am a synthetic sample.')">Sample 1</button>
+                    <button class="example-btn" onclick="setExample('This is handwriting synthesis.')">Sample 2</button>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>🎨 Handwriting Style</h2>
+                <div class="form-group">
+                    <label for="styleSelect">Select a handwriting style (optional):</label>
+                    <select id="styleSelect">
+                        <option value="">Random Style (Unbiased)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="section">
+                <button class="button" id="synthesizeBtn" onclick="synthesize()">
+                    ✨ Synthesize Handwriting
+                </button>
+            </div>
+            
+            <div id="errorContainer"></div>
+            
+            <div class="output-section">
+                <h2>📄 Generated Handwriting</h2>
+                <div class="output-container" id="outputContainer">
+                    <p style="color: #999;">Your synthesized handwriting will appear here...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Load available styles on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            loadStyles();
+        });
+        
+        function loadStyles() {
+            fetch('/api/styles')
+                .then(response => response.json())
+                .then(data => {
+                    const select = document.getElementById('styleSelect');
+                    data.styles.forEach(style => {
+                        const option = document.createElement('option');
+                        option.value = style.id;
+                        option.textContent = style.name;
+                        select.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading styles:', error);
+                });
+        }
+        
+        function setExample(text) {
+            document.getElementById('textInput').value = text;
+        }
+        
+        function synthesize() {
+            const text = document.getElementById('textInput').value.trim();
+            const styleId = document.getElementById('styleSelect').value;
+            const outputContainer = document.getElementById('outputContainer');
+            const errorContainer = document.getElementById('errorContainer');
+            const synthesizeBtn = document.getElementById('synthesizeBtn');
+            
+            // Clear previous error
+            errorContainer.innerHTML = '';
+            
+            // Validate input
+            if (!text) {
+                showError('Please enter some text to synthesize.');
+                return;
+            }
+            
+            // Show loading state
+            outputContainer.innerHTML = '<div class="loading">🔄 Synthesizing handwriting... This may take a few moments.</div>';
+            synthesizeBtn.disabled = true;
+            
+            // Prepare request data
+            const requestData = {
+                text: text
+            };
+            
+            if (styleId) {
+                requestData.style_id = parseInt(styleId);
+            }
+            
+            // Make API request
+            fetch('/api/synthesize', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => {
+                        throw new Error(data.error || 'Unknown error occurred');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Display the SVG
+                    outputContainer.innerHTML = data.svg;
+                } else {
+                    throw new Error(data.error || 'Synthesis failed');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showError('Error: ' + error.message);
+                outputContainer.innerHTML = '<p style="color: #999;">Synthesis failed. Please try again.</p>';
+            })
+            .finally(() => {
+                synthesizeBtn.disabled = false;
+            });
+        }
+        
+        function showError(message) {
+            const errorContainer = document.getElementById('errorContainer');
+            errorContainer.innerHTML = '<div class="error">' + message + '</div>';
+        }
+        
+        // Allow Enter key to submit (with Ctrl/Cmd)
+        document.getElementById('textInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                synthesize();
+            }
+        });
+    </script>
+</body>
+</html>
